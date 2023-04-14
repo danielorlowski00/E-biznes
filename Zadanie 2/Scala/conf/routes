@@ -1,0 +1,27 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# https://www.playframework.com/documentation/latest/ScalaRouting
+# ~~~~
+
+# Controller to manage users
+GET     /getUsers                           controllers.UserController.getUsers()
+GET     /getUserById                        controllers.UserController.getUserById(id: Long)
+POST    /addUser                            controllers.UserController.addUser(id: Long, name: String, surname: String)
+PUT     /updateUser                         controllers.UserController.updateUser(id: Long, name: String, surname: String)
+DELETE  /deleteUser                         controllers.UserController.deleteUser(id: Long)
+POST    /addItemToOrder                     controllers.UserController.addItemToOrder(id: Long, itemId: Long)
+DELETE  /deleteItemFromOrder                controllers.UserController.deleteItemFromOrder(id: Long, itemId: Long)
+
+# Controller to manage items
+GET     /getItems                           controllers.ItemController.getItems()
+GET     /getItemById                        controllers.ItemController.getItemById(id: Long)
+POST    /addItem                            controllers.ItemController.addItem(id: Long, name: String, categoryId: Long)
+PUT     /updateItem                         controllers.ItemController.updateItem(id: Long, name: String, categoryId: Long)
+DELETE  /deleteItem                         controllers.ItemController.deleteItem(id: Long)
+
+# Controller to manage categories
+GET     /getCategories                      controllers.CategoryController.getCategories()
+GET     /getCategoryById                    controllers.CategoryController.getCategoryById(id: Long)
+POST    /addCategory                        controllers.CategoryController.addCategory(id: Long, name: String)
+PUT     /updateCategory                     controllers.CategoryController.updateCategory(id: Long, name: String)
+DELETE  /deleteCategory                     controllers.CategoryController.deleteCategory(id: Long)
