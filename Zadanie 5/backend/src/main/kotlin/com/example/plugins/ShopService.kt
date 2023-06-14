@@ -7,7 +7,6 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 
-
 class ShopService(database: Database) {
 
     init {
@@ -30,7 +29,7 @@ class ShopService(database: Database) {
         }[Categories.id]
     }
 
-    suspend fun getCategories(): List<Category>  {
+    suspend fun getCategories(): List<Category> {
         return dbQuery {
             Categories.selectAll().map { resultRow -> castRowToCategory(resultRow) }
         }
@@ -58,7 +57,7 @@ class ShopService(database: Database) {
         }[Items.id]
     }
 
-    suspend fun getItems(): List<Item>  {
+    suspend fun getItems(): List<Item> {
         return dbQuery {
             Items.selectAll().map { resultRow -> castRowToItem(resultRow) }
         }
@@ -95,7 +94,7 @@ class ShopService(database: Database) {
             }[Orders.id]
             price += order.quantity.toDouble() * getItemById(order.itemId)!!.price
         }
-        val payment = Payment(0, minOrderId,false, price)
+        val payment = Payment(0, minOrderId, false, price)
         minOrderId++
         addPayment(payment)
     }
@@ -118,7 +117,7 @@ class ShopService(database: Database) {
     }
 
     private fun addPayment(payment: Payment) {
-        Orders.select(Orders.orderId.eq(payment.id)).map{ resultRow -> castRowToOrder(resultRow) }
+        Orders.select(Orders.orderId.eq(payment.id)).map { resultRow -> castRowToOrder(resultRow) }
         Payments.insert {
             it[orderId] = payment.orderId
             it[total] = payment.total
@@ -140,36 +139,35 @@ class ShopService(database: Database) {
         }
     }
 
-    suspend fun getPayments(): List<Payment>  {
+    suspend fun getPayments(): List<Payment> {
         return dbQuery {
             Payments.selectAll().map { resultRow -> castRowToPayment(resultRow) }
         }
     }
 
-    private fun castRowToCategory(row: ResultRow) = Category (
+    private fun castRowToCategory(row: ResultRow) = Category(
         id = row[Categories.id],
-        name = row[Categories.name]
+        name = row[Categories.name],
     )
 
-    private fun castRowToItem(row: ResultRow) = Item (
+    private fun castRowToItem(row: ResultRow) = Item(
         id = row[Items.id],
         name = row[Items.name],
         categoryName = row[Items.categoryName],
-        price = row[Items.price]
+        price = row[Items.price],
     )
 
-    private fun castRowToOrder(row: ResultRow) = Order (
+    private fun castRowToOrder(row: ResultRow) = Order(
         id = row[Orders.id],
         orderId = row[Orders.orderId],
         itemId = row[Orders.itemId],
-        quantity = row[Orders.quantity]
+        quantity = row[Orders.quantity],
     )
 
-    private fun castRowToPayment(row: ResultRow) = Payment (
+    private fun castRowToPayment(row: ResultRow) = Payment(
         id = row[Payments.id],
         orderId = row[Payments.orderId],
         done = row[Payments.done],
-        total = row[Payments.total]
+        total = row[Payments.total],
     )
 }
-

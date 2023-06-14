@@ -8,10 +8,10 @@ class Payment(
     val id: Int,
     val orderId: Int,
     val done: Boolean,
-    val total: Double
+    val total: Double,
 )
 
-object Payments: Table() {
+object Payments : Table() {
 
     val id = integer("id").autoIncrement()
     val orderId = integer("orderId")
@@ -19,6 +19,3 @@ object Payments: Table() {
     val done = bool("done")
     override val primaryKey = PrimaryKey(id)
 }
-
-
-

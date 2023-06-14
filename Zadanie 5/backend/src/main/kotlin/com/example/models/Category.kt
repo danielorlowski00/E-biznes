@@ -9,7 +9,7 @@ class Category(
     val name: String,
 )
 
-object Categories: Table() {
+object Categories : Table() {
     val id = integer("id").autoIncrement()
     val name = varchar("name", 20)
     override val primaryKey = PrimaryKey(id)

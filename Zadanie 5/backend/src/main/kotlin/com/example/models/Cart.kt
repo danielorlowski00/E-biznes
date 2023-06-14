@@ -11,7 +11,7 @@ class Order(
     val orderId: Int,
 )
 
-object Orders: Table() {
+object Orders : Table() {
     val id = integer("id").autoIncrement()
     val itemId = integer("itemId")
     val quantity = integer("quantity")
@@ -19,6 +19,3 @@ object Orders: Table() {
 
     override val primaryKey = PrimaryKey(id)
 }
-
-
-
