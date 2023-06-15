@@ -1,9 +1,6 @@
 package com.example.plugins
 
-import com.example.models.Category
-import com.example.models.Item
-import com.example.models.Order
-import com.example.models.Payment
+import com.example.models.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -31,7 +28,7 @@ fun Application.configureDatabases() {
             val id = call.parameters["id"]!!.toInt()
             val item = shopService.getItemById(id)
             if (item == null) {
-                call.respond("Item with given id does not exist")
+                call.respond(GlobalVariables.ITEM_DOES_NOT_EXIST)
             } else {
                 call.respond(item)
             }
@@ -45,7 +42,7 @@ fun Application.configureDatabases() {
             val item = call.receive<Item>()
             val existingItem = shopService.getItemById(item.id)
             if (existingItem == null) {
-                call.respond("Item with given id does not exist")
+                call.respond(GlobalVariables.ITEM_DOES_NOT_EXIST)
             } else {
                 shopService.updateItem(item.id, item)
             }
@@ -55,7 +52,7 @@ fun Application.configureDatabases() {
             val id = call.parameters["id"]!!.toInt()
             val existingItem = shopService.getItemById(id)
             if (existingItem == null) {
-                call.respond("Item with given id does not exist")
+                call.respond(GlobalVariables.ITEM_DOES_NOT_EXIST)
             } else {
                 shopService.deleteItem(id)
             }
@@ -71,7 +68,7 @@ fun Application.configureDatabases() {
             val id = call.parameters["id"]!!.toInt()
             val category = shopService.getCategoryById(id)
             if (category == null) {
-                call.respond("Category with given id does not exist")
+                call.respond(GlobalVariables.CATEGORY_DOES_NOT_EXIST)
             } else {
                 call.respond(category)
             }
@@ -85,7 +82,7 @@ fun Application.configureDatabases() {
             val category = call.receive<Category>()
             val existingCategory = shopService.getItemById(category.id)
             if (existingCategory == null) {
-                call.respond("Category with given id does not exist")
+                call.respond(GlobalVariables.CATEGORY_DOES_NOT_EXIST)
             } else {
                 shopService.updateCategory(category.id, category)
             }
@@ -101,7 +98,7 @@ fun Application.configureDatabases() {
             val id = call.parameters["id"]!!.toInt()
             val order = shopService.getOrderById(id)
             if (order.isEmpty()) {
-                call.respond("Order with given id does not exist")
+                call.respond(GlobalVariables.ORDER_DOES_NOT_EXIST)
             } else {
                 call.respond(order)
             }
@@ -115,7 +112,7 @@ fun Application.configureDatabases() {
             val id = call.parameters["id"]!!.toInt()
             val order = shopService.getOrderById(id)
             if (order.isEmpty()) {
-                call.respond("Order with given id does not exist")
+                call.respond(GlobalVariables.ORDER_DOES_NOT_EXIST)
             } else {
                 shopService.deleteOrder(id)
             }
@@ -130,7 +127,7 @@ fun Application.configureDatabases() {
             val id = paymentToUpdate.id
             val payment = shopService.getPaymentById(id)
             if (payment.isEmpty()) {
-                call.respond("Payment with given id does not exist")
+                call.respond(GlobalVariables.PAYMENT_DOES_NOT_EXIST)
             } else {
                 shopService.updatePayment(id)
                 call.respond(shopService.getPaymentById(id))
