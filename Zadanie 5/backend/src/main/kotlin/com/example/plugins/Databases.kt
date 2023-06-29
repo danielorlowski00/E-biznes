@@ -38,7 +38,7 @@ fun Application.configureDatabases() {
             call.respond(shopService.getItems())
         }
 
-        put("updateItem") {
+        put("/updateItem") {
             val item = call.receive<Item>()
             val existingItem = shopService.getItemById(item.id)
             if (existingItem == null) {
@@ -48,7 +48,7 @@ fun Application.configureDatabases() {
             }
         }
 
-        delete("deleteItem") {
+        delete("/deleteItem") {
             val id = call.parameters["id"]!!.toInt()
             val existingItem = shopService.getItemById(id)
             if (existingItem == null) {
@@ -104,9 +104,7 @@ fun Application.configureDatabases() {
             }
         }
 
-        get("/getOrders") {
-            call.respond(shopService.getOrders())
-        }
+
 
         delete("/deleteOrder") {
             val id = call.parameters["id"]!!.toInt()
@@ -118,8 +116,9 @@ fun Application.configureDatabases() {
             }
         }
 
-        get("/getPayments") {
-            call.respond(shopService.getPayments())
+        get("/getPayments/{id}") {
+            val id = call.parameters["id"]!!.toInt()
+            call.respond(shopService.getPayments(id))
         }
 
         put("/pay") {
@@ -132,6 +131,20 @@ fun Application.configureDatabases() {
                 shopService.updatePayment(id)
                 call.respond(shopService.getPaymentById(id))
             }
+        }
+
+        post("/register") {
+            val user = call.receive<User>()
+            call.respond(shopService.register(user))
+        }
+
+        post("/login") {
+            val user = call.receive<User>()
+            call.respond(shopService.logIn(user))
+        }
+
+        get("getUsers") {
+            call.respond(shopService.getUsers())
         }
     }
 }

@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import axios from "axios";
+import {useUser} from "./useUser";
 
 export default function Payments({orders, setOrders}) {
+    const {userId} = useUser();
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8080/getPayments')
+        axios.get('http://127.0.0.1:8080/getPayments/' + userId)
             .then((res) => {
                 setOrders(res.data)
             })
-    }, [setOrders]);
+    }, [setOrders, userId]);
 
     const pay = (payment)=> {
         axios.put('http://127.0.0.1:8080/pay', payment)
@@ -16,7 +18,7 @@ export default function Payments({orders, setOrders}) {
         let index = orders.findIndex(order => order.id === payment.id)
         orders[index].done = true
         setOrders(orders)
-        window.location.reload()
+        window.alert("Zamówienie opłacone")
     }
 
     return (

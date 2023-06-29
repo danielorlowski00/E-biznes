@@ -15,6 +15,7 @@ class ShopService(database: Database) {
             SchemaUtils.create(Items)
             SchemaUtils.create(Payments)
             SchemaUtils.create(Orders)
+            SchemaUtils.create(Users)
         }
     }
 
@@ -86,24 +87,20 @@ class ShopService(database: Database) {
 
     suspend fun addOrder(orders: List<Order>): Unit = dbQuery {
         var price = 0.0
+        val id = orders[0].userId
         for (order in orders) {
             Orders.insert {
                 it[itemId] = order.itemId
                 it[quantity] = order.quantity
                 it[orderId] = minOrderId
+                it[userId] = order.userId
             }[Orders.id]
             price += order.quantity.toDouble() * getItemById(order.itemId)!!.price
         }
-        val payment = Payment(0, minOrderId, false, price)
+        val payment = Payment(0, minOrderId, false, price, id)
         minOrderId++
         addPayment(payment)
     }
-
-    fun getOrders(): Map<Int, List<Order>> {
-        val ordersList: List<Order> = Orders.selectAll().map { resultRow -> castRowToOrder(resultRow) }
-        return ordersList.groupBy { it.orderId }
-    }
-
     suspend fun getOrderById(id: Int): List<Order> {
         return dbQuery {
             Orders.select(Orders.orderId.eq(id)).map { resultRow -> castRowToOrder(resultRow) }
@@ -122,6 +119,7 @@ class ShopService(database: Database) {
             it[orderId] = payment.orderId
             it[total] = payment.total
             it[done] = payment.done
+            it[userId] = payment.userId
         }[Payments.id]
     }
 
@@ -139,9 +137,36 @@ class ShopService(database: Database) {
         }
     }
 
-    suspend fun getPayments(): List<Payment> {
+    suspend fun getPayments(id: Int): List<Payment> {
         return dbQuery {
-            Payments.selectAll().map { resultRow -> castRowToPayment(resultRow) }
+            Payments.select(Payments.userId eq id).map { resultRow -> castRowToPayment(resultRow) }
+        }
+    }
+
+    suspend fun getUsers(): List<User> {
+        return dbQuery {
+            Users.selectAll().map { resultRow -> castRowToUser(resultRow) }
+        }
+    }
+    suspend fun register(user: User): Boolean {
+        val usersList: List<User> = dbQuery { Users.select(Users.login eq user.login).map { resultRow -> castRowToUser(resultRow) }}
+        return if (usersList.isNotEmpty()) {
+            false
+        } else {
+            dbQuery {
+                Users.insert {
+                    it[login] = user.login
+                    it[password] = user.password
+                }[Users.id] }
+            true
+        }
+    }
+    suspend fun logIn(user: User): Int {
+        val usersList: List<User> = dbQuery { Users.select((Users.login eq user.login) and (Users.password eq user.password)).map { resultRow -> castRowToUser(resultRow) }}
+        return if (usersList.isNotEmpty()) {
+            usersList[0].id
+        } else {
+            -1
         }
     }
 
@@ -162,6 +187,7 @@ class ShopService(database: Database) {
         orderId = row[Orders.orderId],
         itemId = row[Orders.itemId],
         quantity = row[Orders.quantity],
+        userId = row[Orders.userId],
     )
 
     private fun castRowToPayment(row: ResultRow) = Payment(
@@ -169,5 +195,11 @@ class ShopService(database: Database) {
         orderId = row[Payments.orderId],
         done = row[Payments.done],
         total = row[Payments.total],
+        userId = row[Payments.userId],
+    )
+    private fun castRowToUser(row: ResultRow) = User(
+        id = row[Users.id],
+        login = row[Users.login],
+        password = row[Users.password],
     )
 }

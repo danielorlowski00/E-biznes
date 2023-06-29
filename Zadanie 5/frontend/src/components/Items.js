@@ -1,10 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import axios from "axios";
 import { Cart } from "../models/Cart";
+import {useUser} from "./useUser";
 
 
 export default function Items({cart,setCart}){
-
+    
+    const {userId} = useUser();
     const [items, setItems] = useState([]);
 
     const [itemInCart,setItemInCart] = useState(Cart)
@@ -25,12 +27,13 @@ export default function Items({cart,setCart}){
                 id: itemInCart.id,
                 itemId: itemInCart.itemId,
                 quantity: itemInCart.quantity,
-                orderId: 0
+                orderId: 0,
+                userId: userId
             }
             cart.isEmpty ? setCart(order) : setCart(cart.concat(order))
             itemBought.current = false
         }
-    }, [cart, itemInCart.id, itemInCart.itemId, itemInCart.quantity, setCart])
+    }, [cart, itemInCart.id, itemInCart.itemId, itemInCart.quantity, setCart, userId])
 
     const addToCart = (item)=> {
         let index = cart.findIndex(itemInCart => itemInCart.itemId === item.id)

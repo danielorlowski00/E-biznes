@@ -9,6 +9,7 @@ class Order(
     val itemId: Int,
     val quantity: Int,
     val orderId: Int,
+    val userId: Int,
 )
 
 object Orders : Table() {
@@ -16,6 +17,7 @@ object Orders : Table() {
     val itemId = integer("itemId")
     val quantity = integer("quantity")
     val orderId = integer("orderId")
+    val userId = integer("userId")
 
     override val primaryKey = PrimaryKey(id)
 }

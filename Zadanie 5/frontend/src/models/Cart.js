@@ -3,4 +3,5 @@ export let Cart = {
     itemId: Number,
     quantity: Number,
     orderId: Number,
+    userId: Number,
 };
