@@ -45,6 +45,7 @@ fun Application.configureDatabases() {
                 call.respond(GlobalVariables.ITEM_DOES_NOT_EXIST)
             } else {
                 shopService.updateItem(item.id, item)
+                call.respond(item)
             }
         }
 
@@ -55,36 +56,7 @@ fun Application.configureDatabases() {
                 call.respond(GlobalVariables.ITEM_DOES_NOT_EXIST)
             } else {
                 shopService.deleteItem(id)
-            }
-        }
-
-        post("/addCategory") {
-            val category = call.receive<Category>()
-            shopService.addCategory(category)
-            call.respond(category)
-        }
-
-        get("/getCategoryById") {
-            val id = call.parameters["id"]!!.toInt()
-            val category = shopService.getCategoryById(id)
-            if (category == null) {
-                call.respond(GlobalVariables.CATEGORY_DOES_NOT_EXIST)
-            } else {
-                call.respond(category)
-            }
-        }
-
-        get("/getCategories") {
-            call.respond(shopService.getCategories())
-        }
-
-        put("/updateCategory") {
-            val category = call.receive<Category>()
-            val existingCategory = shopService.getItemById(category.id)
-            if (existingCategory == null) {
-                call.respond(GlobalVariables.CATEGORY_DOES_NOT_EXIST)
-            } else {
-                shopService.updateCategory(category.id, category)
+                call.respond(id)
             }
         }
 
@@ -104,8 +76,6 @@ fun Application.configureDatabases() {
             }
         }
 
-
-
         delete("/deleteOrder") {
             val id = call.parameters["id"]!!.toInt()
             val order = shopService.getOrderById(id)
@@ -113,17 +83,22 @@ fun Application.configureDatabases() {
                 call.respond(GlobalVariables.ORDER_DOES_NOT_EXIST)
             } else {
                 shopService.deleteOrder(id)
+                call.respond(id)
             }
         }
 
         get("/getPayments/{id}") {
             val id = call.parameters["id"]!!.toInt()
-            call.respond(shopService.getPayments(id))
+            val existingUser = shopService.getUserById(id)
+            if (existingUser == null) {
+                call.respond(GlobalVariables.USER_DOES_NOT_EXIST)
+            } else {
+                call.respond(shopService.getPayments(id))
+            }
         }
 
         put("/pay") {
-            val paymentToUpdate = call.receive<Payment>()
-            val id = paymentToUpdate.id
+            val id = call.parameters["id"]!!.toInt()
             val payment = shopService.getPaymentById(id)
             if (payment.isEmpty()) {
                 call.respond(GlobalVariables.PAYMENT_DOES_NOT_EXIST)
@@ -143,8 +118,40 @@ fun Application.configureDatabases() {
             call.respond(shopService.logIn(user))
         }
 
-        get("getUsers") {
+        get("/getUsers") {
             call.respond(shopService.getUsers())
+        }
+
+        get("/getUserById") {
+            val id = call.parameters["id"]!!.toInt()
+            val existingUser = shopService.getUserById(id)
+            if (existingUser == null) {
+                call.respond(GlobalVariables.USER_DOES_NOT_EXIST)
+            } else {
+                call.respond(existingUser)
+            }
+        }
+
+        delete("/deleteUser") {
+            val id = call.parameters["id"]!!.toInt()
+            val existingUser = shopService.getUserById(id)
+            if (existingUser == null) {
+                call.respond(GlobalVariables.USER_DOES_NOT_EXIST)
+            } else {
+                shopService.deleteUser(id)
+                call.respond(id)
+            }
+        }
+
+        put("/updateUser") {
+            val user = call.receive<User>()
+            val existingUser = shopService.getUserById(user.id)
+            if (existingUser == null) {
+                call.respond(GlobalVariables.USER_DOES_NOT_EXIST)
+            } else {
+                shopService.updateUser(user.id, user)
+                call.respond(user)
+            }
         }
     }
 }

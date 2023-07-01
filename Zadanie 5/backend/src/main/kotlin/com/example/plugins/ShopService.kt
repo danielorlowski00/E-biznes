@@ -11,7 +11,6 @@ class ShopService(database: Database) {
 
     init {
         transaction(database) {
-            SchemaUtils.create(Categories)
             SchemaUtils.create(Items)
             SchemaUtils.create(Payments)
             SchemaUtils.create(Orders)
@@ -24,31 +23,6 @@ class ShopService(database: Database) {
     private suspend fun <T> dbQuery(block: suspend () -> T): T =
         newSuspendedTransaction(Dispatchers.IO) { block() }
 
-    suspend fun addCategory(category: Category): Int = dbQuery {
-        Categories.insert {
-            it[name] = category.name
-        }[Categories.id]
-    }
-
-    suspend fun getCategories(): List<Category> {
-        return dbQuery {
-            Categories.selectAll().map { resultRow -> castRowToCategory(resultRow) }
-        }
-    }
-
-    suspend fun getCategoryById(id: Int): Category? {
-        return dbQuery {
-            Categories.select(Categories.id.eq(id)).map { resultRow -> castRowToCategory(resultRow) }.singleOrNull()
-        }
-    }
-
-    suspend fun updateCategory(id: Int, category: Category) {
-        dbQuery {
-            Categories.update({ Categories.id eq id }) {
-                it[name] = category.name
-            }
-        }
-    }
 
     suspend fun addItem(item: Item): Int = dbQuery {
         Items.insert {
@@ -110,6 +84,7 @@ class ShopService(database: Database) {
     suspend fun deleteOrder(id: Int) {
         dbQuery {
             Orders.deleteWhere { orderId.eq(id) }
+            Payments.deleteWhere { orderId.eq(id) }
         }
     }
 
@@ -170,10 +145,26 @@ class ShopService(database: Database) {
         }
     }
 
-    private fun castRowToCategory(row: ResultRow) = Category(
-        id = row[Categories.id],
-        name = row[Categories.name],
-    )
+    suspend fun getUserById(idToGet: Int): User? {
+        return dbQuery {
+            Users.select( Users.id.eq(idToGet)).map { resultRow -> castRowToUser(resultRow) }.singleOrNull()
+        }
+    }
+
+    suspend fun deleteUser(idToDelete: Int) {
+        dbQuery {
+            Users.deleteWhere { id.eq(idToDelete) }
+        }
+    }
+
+    suspend fun updateUser(id: Int, user: User) {
+        dbQuery {
+            Users.update({ Users.id eq id }) {
+                it[login] = user.login
+                it[password] = user.password
+            }
+        }
+    }
 
     private fun castRowToItem(row: ResultRow) = Item(
         id = row[Items.id],

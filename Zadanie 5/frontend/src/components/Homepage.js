@@ -16,7 +16,7 @@ function Homepage() {
             {userId !== undefined && <Link to="/payments"> Payments </Link>}
             {userId === undefined && <Link to="/"> Register </Link>}
             {userId === undefined && <Link to="/login"> Log In </Link>}
-            {userId !== undefined && <Link to ="/" onClick={handleSignOut}> Sign Out </Link>}
+            {userId !== undefined && <Link to="/" onClick={handleSignOut}> Sign Out </Link>}
         </div>
     );
 }
