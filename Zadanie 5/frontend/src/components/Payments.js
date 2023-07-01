@@ -13,7 +13,7 @@ export default function Payments({orders, setOrders}) {
     }, [setOrders, userId]);
 
     const pay = (payment)=> {
-        axios.put('http://127.0.0.1:8080/pay', payment)
+        axios.put('http://127.0.0.1:8080/pay', null, { params: { id: payment.id }})
             .then(res => console.log(res.data));
         let index = orders.findIndex(order => order.id === payment.id)
         orders[index].done = true

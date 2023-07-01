@@ -21,7 +21,7 @@ export function Login() {
             if (response.data !== -1) {
                 setUserId(response.data);
                 console.log(response.data)
-                navigate("/");
+                navigate("/items");
             } else {
                 window.alert("Niepoprawne dane logowania")
             }
