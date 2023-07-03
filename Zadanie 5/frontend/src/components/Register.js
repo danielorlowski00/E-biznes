@@ -29,6 +29,7 @@ export function Register() {
             <input
                 type="text"
                 placeholder="Login"
+                id="login"
                 value={login}
                 onChange={(e) => setLogin(e.target.value)}
             />
@@ -36,11 +37,12 @@ export function Register() {
             <input
                 type="password"
                 placeholder="Password"
+                id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
             <br />
-            <input type="submit" value="Register" />
+            <input id="register" type="submit" value="Register" />
         </form>
     );
 }

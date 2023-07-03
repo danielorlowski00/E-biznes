@@ -11,12 +11,12 @@ function Homepage() {
 
     return (
         <div>
-            {userId !== undefined && <Link to="/items" className={"items"}> Items </Link>}
-            {userId !== undefined && <Link to="/cart"> Cart </Link>}
-            {userId !== undefined && <Link to="/payments"> Payments </Link>}
-            {userId === undefined && <Link to="/"> Register </Link>}
-            {userId === undefined && <Link to="/login"> Log In </Link>}
-            {userId !== undefined && <Link to="/" onClick={handleSignOut}> Sign Out </Link>}
+            {userId !== undefined && <Link to="/items" id="items-nav"> Items </Link>}
+            {userId !== undefined && <Link to="/cart" id="cart-nav"> Cart </Link>}
+            {userId !== undefined && <Link to="/payments" id="payments-nav"> Payments </Link>}
+            {userId === undefined && <Link to="/" id="register-nav"> Register </Link>}
+            {userId === undefined && <Link to="/login" id="login-nav"> Log In </Link>}
+            {userId !== undefined && <Link to="/login" id="signout-nav" onClick={handleSignOut}> Sign Out </Link>}
         </div>
     );
 }

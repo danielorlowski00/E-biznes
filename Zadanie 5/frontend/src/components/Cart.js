@@ -14,13 +14,13 @@ export default function Cart({cart, setCart}){
     return (
         <div>
             {cart.map((order) => (
-                <div key={order.id}>
+                <div id={"cart-" + order.id} key={order.id}>
                     <p> Item ID: {order.itemId} </p>
                     <p> Quantity: {order.quantity} </p>
-                    <button onClick={() => deleteItemFromCart(order.itemId)}> Delete from cart </button>
+                    <button id={"delete-cart-" + order.id} onClick={() => deleteItemFromCart(order.itemId)}> Delete from cart </button>
                 </div>
             ))}
-            {cart.length > 0 && <button onClick={()=> finalizeOrder(cart)}> Order! </button>}
+            {cart.length > 0 && <button id="order" onClick={()=> finalizeOrder(cart)}> Order! </button>}
         </div>
     );
 }

@@ -52,12 +52,12 @@ export default function Items({cart,setCart}){
     }
     return (
         <div>{items.map((item) => (
-            <div key={item.id}>
+            <div id={"item-" + item.id} key={item.id}>
                 <h3> {item.name} </h3>
                 <p> ID: {item.id} </p>
                 <p> Category: {item.categoryName} </p>
                 <p> Price: ${item.price} </p>
-                <button onClick={() => addToCart(item)}> Add to cart! </button>
+                <button id={"item-" + item.id + "-add"} onClick={() => addToCart(item)}> Add to cart! </button>
             </div>
         ))}
         </div>

@@ -36,6 +36,7 @@ export function Login() {
             <input
                 type="text"
                 placeholder="Login"
+                id="login"
                 value={login}
                 onChange={(e) => setLogin(e.target.value)}
             />
@@ -43,11 +44,12 @@ export function Login() {
             <input
                 type="password"
                 placeholder="Password"
+                id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
             <br />
-            <button type="submit">Log in</button>
+            <button id="log-in" type="submit">Log in</button>
         </form>
     );
 }
