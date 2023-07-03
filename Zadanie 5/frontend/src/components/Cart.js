@@ -7,7 +7,7 @@ export default function Cart({cart, setCart}){
         setCart(cart.filter(order => order.itemId !== itemId));
     }
     const finalizeOrder = (cart)=> {
-        axios.post('http://127.0.0.1:8080/addOrder', cart).then(res => console.log(res))
+        axios.post(process.env.REACT_APP_BACKEND_URL + 'addOrder', cart).then(res => console.log(res))
         setCart([])
     }
 

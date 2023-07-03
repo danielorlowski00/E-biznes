@@ -9,8 +9,7 @@ export function Register() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-
-        axios.post('http://127.0.0.1:8080/register', {
+        axios.post(process.env.REACT_APP_BACKEND_URL + 'register', {
             id: -1,
             login: login,
             password: password

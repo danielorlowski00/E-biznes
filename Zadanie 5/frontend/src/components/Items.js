@@ -15,7 +15,7 @@ export default function Items({cart,setCart}){
 
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8080/getItems')
+        axios.get(process.env.REACT_APP_BACKEND_URL + 'getItems')
             .then((res) => {
                 setItems(res.data)
             })

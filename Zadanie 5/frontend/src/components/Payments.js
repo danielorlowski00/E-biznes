@@ -6,14 +6,14 @@ export default function Payments({orders, setOrders}) {
     const {userId} = useUser();
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8080/getPayments/' + userId)
+        axios.get(process.env.REACT_APP_BACKEND_URL + 'getPayments/' + userId)
             .then((res) => {
                 setOrders(res.data)
             })
     }, [setOrders, userId]);
 
     const pay = (payment)=> {
-        axios.put('http://127.0.0.1:8080/pay', null, { params: { id: payment.id }})
+        axios.put(process.env.REACT_APP_BACKEND_URL + 'pay', null, { params: { id: payment.id }})
             .then(res => console.log(res.data));
         let index = orders.findIndex(order => order.id === payment.id)
         orders[index].done = true

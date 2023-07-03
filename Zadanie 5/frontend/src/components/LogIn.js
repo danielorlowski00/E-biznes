@@ -13,7 +13,7 @@ export function Login() {
         event.preventDefault();
 
         try {
-            const response = await axios.post('http://127.0.0.1:8080/login', {
+            const response = await axios.post(process.env.REACT_APP_BACKEND_URL + 'login', {
                 id: -1,
                 login: login,
                 password: password,
